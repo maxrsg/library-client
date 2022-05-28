@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { ICreateItem, ILibraryItem } from "../interfaces/items";
 
-const url = "http://localhost:5000";
+const url = "http://localhost:5000/items";
 
 interface IRecievedItemData {
   items: ILibraryItem[];
@@ -13,9 +13,7 @@ interface ICreatedResponse {
 
 export const getAllItems = async (): Promise<ILibraryItem[] | undefined> => {
   try {
-    const response: AxiosResponse<IRecievedItemData> = await axios.get(
-      url + "/items"
-    );
+    const response: AxiosResponse<IRecievedItemData> = await axios.get(url);
     return response.data.items;
   } catch (error) {
     console.log(error);
@@ -39,7 +37,7 @@ export const createItem = async (
       BorrowDate: null,
     };
     const response: AxiosResponse<ICreatedResponse> = await axios.post(
-      url + "/items",
+      url,
       ItemToCreate
     );
     return response.data;
@@ -62,10 +60,7 @@ export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
       Borrower: null,
       BorrowDate: null,
     };
-    const response: AxiosResponse<any> = await axios.put(
-      url + "/items",
-      editedItem
-    );
+    const response: AxiosResponse<any> = await axios.put(url, editedItem);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -75,9 +70,7 @@ export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
 
 export const deleteItem = async (id: number): Promise<any | undefined> => {
   try {
-    const response: AxiosResponse<any> = await axios.delete(
-      url + "/items/" + id
-    );
+    const response: AxiosResponse<any> = await axios.delete(url + id);
     return response.data;
   } catch (error) {
     console.log(error);
