@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -12,6 +12,8 @@ import {
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { ILibraryItem } from "../../utils/interfaces/items";
 import { createItem } from "../../utils/api/items";
+import { getAllCategories } from "../../utils/api/category";
+import { ICategory } from "../../utils/interfaces/category";
 
 interface IFormValues {
   CategoryId?: number;
@@ -29,7 +31,17 @@ interface ICreateFormProps {
 
 const CreateForm = (props: ICreateFormProps) => {
   const [type, setType] = useState("Book");
+  const [categoryData, setCategoryData] = useState<ICategory[]>();
   const isEditing = props.item != undefined;
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const data = await getAllCategories();
+      setCategoryData(data);
+      console.log(data);
+    };
+    getCategories();
+  }, []);
 
   let initialValues: IFormValues = {
     CategoryId: undefined,
@@ -158,10 +170,13 @@ const CreateForm = (props: ICreateFormProps) => {
                   id="CategoryId"
                   placeholder="Select category"
                 >
-                  <option value="1">Fantasy</option>
-                  <option value="2">Horror</option>
-                  <option value="3">Action</option>
-                  <option value="4">Mystery</option>
+                  {categoryData?.map((category: ICategory) => {
+                    return (
+                      <option value={category.Id}>
+                        {category.CategoryName}
+                      </option>
+                    );
+                  })}
                 </Select>
                 <FormErrorMessage>{form.errors.CategoryId}</FormErrorMessage>
               </FormControl>

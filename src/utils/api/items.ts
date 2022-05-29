@@ -26,7 +26,7 @@ export const createItem = async (
 ): Promise<ICreatedResponse | undefined> => {
   try {
     const ItemToCreate = {
-      CategoryId: 1,
+      CategoryId: item.CategoryId,
       Title: item.Title,
       Author: item.Author,
       Pages: item.Pages || null,
