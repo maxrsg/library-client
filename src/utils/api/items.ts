@@ -11,6 +11,11 @@ interface ICreatedResponse {
   itemId: number;
 }
 
+interface IBorrowData {
+  Id?: number;
+  Borrower: string | null;
+}
+
 export const getAllItems = async (): Promise<ILibraryItem[] | undefined> => {
   try {
     const response: AxiosResponse<IRecievedItemData> = await axios.get(url);
@@ -71,6 +76,21 @@ export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
 export const deleteItem = async (id: number): Promise<any | undefined> => {
   try {
     const response: AxiosResponse<any> = await axios.delete(url + "/" + id);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
+
+export const borrowItem = async (
+  borrowData: IBorrowData
+): Promise<any | undefined> => {
+  try {
+    const response: AxiosResponse<any> = await axios.put(
+      url + "/borrow",
+      borrowData
+    );
     return response.data;
   } catch (error) {
     console.log(error);

@@ -4,7 +4,6 @@ import {
   Icon,
   Spinner,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -16,6 +15,7 @@ import { deleteItem, getAllItems } from "../../utils/api/items";
 import { ILibraryItem } from "../../utils/interfaces/items";
 import { MdDelete } from "react-icons/md";
 import CreateItem from "./CreateItem";
+import Borrow from "./Borrow";
 
 const ShowItems = () => {
   const [itemData, setItemData] = useState<ILibraryItem[]>();
@@ -61,8 +61,9 @@ const ShowItems = () => {
               <Th>Type</Th>
               <Th>Borrower</Th>
               <Th>Borrow date</Th>
-              <Th></Th>
-              <Th></Th>
+              <Th>Check out/in</Th>
+              <Th>Edit</Th>
+              <Th>Delete</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -73,7 +74,21 @@ const ShowItems = () => {
                   <Td>{item.CategoryName}</Td>
                   <Td>{item.Type}</Td>
                   <Td>{item.Borrower}</Td>
-                  <Td>{new Date(item.BorrowDate).toLocaleDateString()}</Td>
+                  <Td>
+                    {item.BorrowDate
+                      ? new Date(item.BorrowDate).toLocaleDateString()
+                      : null}
+                  </Td>
+                  <Td>
+                    {item.IsBorrowable ? (
+                      <Borrow
+                        id={item.Id}
+                        borrower={item.Borrower}
+                        title={item.Title}
+                        borrowDate={item.BorrowDate}
+                      />
+                    ) : null}
+                  </Td>
                   <Td>
                     <CreateItem isEditing={true} item={item} />
                   </Td>
