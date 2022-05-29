@@ -37,6 +37,11 @@ const ShowItems = () => {
     }
   };
 
+  const displayTitleWithAcronym = (title: string) => {
+    const acronym = title.match(/\b(\w)/g);
+    return title + " (" + acronym?.join("") + ")";
+  };
+
   if (!itemData) {
     return (
       <Flex
@@ -70,7 +75,7 @@ const ShowItems = () => {
             {itemData.map((item: ILibraryItem, i) => {
               return (
                 <Tr key={i}>
-                  <Td>{item.Title}</Td>
+                  <Td> {displayTitleWithAcronym(item.Title)}</Td>
                   <Td>{item.CategoryName}</Td>
                   <Td>{item.Type}</Td>
                   <Td>{item.Borrower}</Td>
