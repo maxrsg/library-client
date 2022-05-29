@@ -32,7 +32,7 @@ export const createItem = async (
       Pages: item.Pages || null,
       RunTimeMinutes: item.RunTimeMinutes || null,
       Type: item.Type,
-      IsBorrowable: item.IsBorrowable,
+      IsBorrowable: item.Type === "Reference Book" ? false : true,
       Borrower: null,
       BorrowDate: null,
     };
@@ -56,7 +56,7 @@ export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
       Pages: item.Pages || null,
       RunTimeMinutes: item.RunTimeMinutes || null,
       Type: item.Type,
-      IsBorrowable: item.IsBorrowable,
+      IsBorrowable: item.Type === "Reference Book" ? false : true,
       Borrower: null,
       BorrowDate: null,
     };
