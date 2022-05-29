@@ -20,14 +20,17 @@ import {
   Td,
   Spinner,
   Flex,
-  Collapse,
 } from "@chakra-ui/react";
 import { ICategory } from "../../utils/interfaces/category";
 import { deleteCategory, getAllCategories } from "../../utils/api/category";
 import { MdDelete } from "react-icons/md";
 import CreateForm from "./CreateForm";
+import { AiFillEdit } from "react-icons/ai";
+import CategoryForm from "./CategoryForm";
 
 const ShowCategory = () => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [categoryToEdit, setCategoryToEdit] = useState<ICategory>();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [categories, setCategories] = useState<ICategory[]>();
 
@@ -37,14 +40,22 @@ const ShowCategory = () => {
       setCategories(data);
       console.log(data);
     };
-    getCategories();
-  }, []);
+
+    if (!isEditing) {
+      getCategories();
+    }
+  }, [isEditing]);
 
   const callDeleteCategory = async (id: number | undefined) => {
     if (id) {
       const response = await deleteCategory(id);
       console.log(response);
     }
+  };
+
+  const handleEditing = async (category: ICategory) => {
+    setIsEditing(true);
+    setCategoryToEdit(category);
   };
 
   if (!categories) {
@@ -81,8 +92,6 @@ const ShowCategory = () => {
           <ModalHeader>Categories</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            {/* <CreateForm/> */}
-            {}
             <CreateForm />
             <TableContainer mt="2em">
               <Table variant="striped" colorScheme="teal">
@@ -94,26 +103,51 @@ const ShowCategory = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {categories.map((category: ICategory, i) => {
-                    return (
-                      <Tr key={i}>
-                        <Td>{category.CategoryName}</Td>
-                        <Td>
-                          {/* <CreateItem isEditing={true} item={item} /> */}
-                        </Td>
-                        <Td>
-                          <Icon
-                            as={MdDelete}
-                            w="1.5em"
-                            h="1.5em"
-                            color="red.600"
-                            cursor="pointer"
-                            onClick={() => callDeleteCategory(category.Id)}
-                          />
-                        </Td>
-                      </Tr>
-                    );
-                  })}
+                  {isEditing ? (
+                    <Box>
+                      <CategoryForm
+                        category={categoryToEdit}
+                        setIsEditing={setIsEditing}
+                      />
+                      <Button onClick={() => setIsEditing(false)}>
+                        Cancel
+                      </Button>
+                    </Box>
+                  ) : (
+                    <>
+                      {categories.map((category: ICategory, i) => {
+                        return (
+                          <Tr key={i}>
+                            <Td>{category.CategoryName}</Td>
+                            <Td>
+                              <Icon
+                                as={AiFillEdit}
+                                w="1.5em"
+                                h="1.5em"
+                                color="gray.900"
+                                cursor="pointer"
+                                onClick={() => handleEditing(category)}
+                                _hover={{
+                                  color: "teal.500",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Td>
+                            <Td>
+                              <Icon
+                                as={MdDelete}
+                                w="1.5em"
+                                h="1.5em"
+                                color="red.600"
+                                cursor="pointer"
+                                onClick={() => callDeleteCategory(category.Id)}
+                              />
+                            </Td>
+                          </Tr>
+                        );
+                      })}
+                    </>
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>

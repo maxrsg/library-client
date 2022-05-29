@@ -7,6 +7,7 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
+  Icon,
   Input,
   Spacer,
   useDisclosure,
@@ -14,23 +15,25 @@ import {
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { ICategory } from "../../utils/interfaces/category";
 import { createCategory } from "../../utils/api/category";
+import { AiFillEdit } from "react-icons/ai";
+import CategoryForm from "./CategoryForm";
 
-const CreateForm = () => {
+interface ICreateForm {
+  category?: ICategory;
+  isEditing?: boolean;
+  openBox?: boolean;
+}
+
+const CreateForm = (props: ICreateForm) => {
   const { isOpen, onToggle } = useDisclosure();
-
-  const validateRequired = (value: string) => {
-    let error;
-    if (value == undefined) {
-      error = "This field is required";
-    }
-    return error;
-  };
+  const isEditing = props.category != undefined;
 
   return (
     <>
       <Button colorScheme="teal" onClick={onToggle}>
         Create new category
       </Button>
+
       <Collapse in={isOpen} animateOpacity>
         <Box
           p="40px"
@@ -40,56 +43,10 @@ const CreateForm = () => {
           shadow="md"
           border="2px solid teal"
         >
-          <Formik
-            initialValues={{ CategoryName: undefined }}
-            onSubmit={async (values: any) => {
-              const response = await createCategory(values.CategoryName);
-            }}
-          >
-            {(props) => (
-              <Form>
-                <Field name="CategoryName" validate={validateRequired}>
-                  {({
-                    field,
-                    form,
-                  }: {
-                    field: FieldInputProps<string>;
-                    form: FormikProps<ICategory>;
-                  }) => (
-                    <FormControl
-                      isInvalid={
-                        form.errors.CategoryName != undefined &&
-                        form.touched.CategoryName
-                      }
-                      mb="1em"
-                    >
-                      <FormLabel htmlFor="CategoryName">
-                        Category name
-                      </FormLabel>
-                      <Input {...field} id="CategoryName" placeholder="..." />
-                      <FormErrorMessage>
-                        {form.errors.CategoryName}
-                      </FormErrorMessage>
-                    </FormControl>
-                  )}
-                </Field>
-                <Flex>
-                  <Button
-                    mt={4}
-                    colorScheme="teal"
-                    isLoading={props.isSubmitting}
-                    type="submit"
-                  >
-                    Create
-                  </Button>
-                  <Spacer />
-                  <Button mt={4} onClick={onToggle}>
-                    Cancel
-                  </Button>
-                </Flex>
-              </Form>
-            )}
-          </Formik>
+          <CategoryForm />
+          <Button mt={4} onClick={onToggle}>
+            Cancel
+          </Button>
         </Box>
       </Collapse>
     </>

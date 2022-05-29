@@ -40,3 +40,20 @@ export const deleteCategory = async (id: number): Promise<any | undefined> => {
     return undefined;
   }
 };
+
+export const editCategory = async (
+  id: number | undefined,
+  categoryName: string
+): Promise<any | undefined> => {
+  try {
+    const editedCategory = {
+      Id: id,
+      CategoryName: categoryName,
+    };
+    const response: AxiosResponse<any> = await axios.put(url, editedCategory);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
