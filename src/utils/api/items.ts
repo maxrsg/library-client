@@ -70,7 +70,7 @@ export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
 
 export const deleteItem = async (id: number): Promise<any | undefined> => {
   try {
-    const response: AxiosResponse<any> = await axios.delete(url + id);
+    const response: AxiosResponse<any> = await axios.delete(url + "/" + id);
     return response.data;
   } catch (error) {
     console.log(error);

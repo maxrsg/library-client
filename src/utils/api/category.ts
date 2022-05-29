@@ -30,3 +30,13 @@ export const createCategory = async (
     return undefined;
   }
 };
+
+export const deleteCategory = async (id: number): Promise<any | undefined> => {
+  try {
+    const response: AxiosResponse<any> = await axios.delete(url + "/" + id);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};

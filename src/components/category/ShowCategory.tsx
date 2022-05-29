@@ -23,7 +23,7 @@ import {
   Collapse,
 } from "@chakra-ui/react";
 import { ICategory } from "../../utils/interfaces/category";
-import { getAllCategories } from "../../utils/api/category";
+import { deleteCategory, getAllCategories } from "../../utils/api/category";
 import { MdDelete } from "react-icons/md";
 import CreateForm from "./CreateForm";
 
@@ -39,6 +39,13 @@ const ShowCategory = () => {
     };
     getCategories();
   }, []);
+
+  const callDeleteCategory = async (id: number | undefined) => {
+    if (id) {
+      const response = await deleteCategory(id);
+      console.log(response);
+    }
+  };
 
   if (!categories) {
     return (
@@ -87,10 +94,10 @@ const ShowCategory = () => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {categories.map((item: ICategory, i) => {
+                  {categories.map((category: ICategory, i) => {
                     return (
                       <Tr key={i}>
-                        <Td>{item.CategoryName}</Td>
+                        <Td>{category.CategoryName}</Td>
                         <Td>
                           {/* <CreateItem isEditing={true} item={item} /> */}
                         </Td>
@@ -101,7 +108,7 @@ const ShowCategory = () => {
                             h="1.5em"
                             color="red.600"
                             cursor="pointer"
-                            // onClick={() => callDeleteItem(item.Id)}
+                            onClick={() => callDeleteCategory(category.Id)}
                           />
                         </Td>
                       </Tr>
