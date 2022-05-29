@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { ILibraryItem } from "../../utils/interfaces/items";
-import { createItem } from "../../utils/api/items";
+import { createItem, editItem } from "../../utils/api/items";
 import { getAllCategories } from "../../utils/api/category";
 import { ICategory } from "../../utils/interfaces/category";
 
@@ -86,8 +86,13 @@ const CreateForm = (props: ICreateFormProps) => {
       initialValues={initialValues}
       onSubmit={async (values: any, actions) => {
         console.log(values);
-        const response = await createItem(values);
-        console.log(response);
+        if (isEditing) {
+          values.Id = props.item?.Id;
+          const response = await editItem(values);
+          console.log(response);
+        } else {
+          const response = await createItem(values);
+        }
       }}
     >
       {(props) => (

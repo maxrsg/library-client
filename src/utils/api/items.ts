@@ -52,9 +52,12 @@ export const createItem = async (
   }
 };
 
-export const editItem = async (item: ICreateItem): Promise<any | undefined> => {
+export const editItem = async (
+  item: ILibraryItem
+): Promise<any | undefined> => {
   try {
     const editedItem = {
+      Id: item.Id,
       CategoryId: item.CategoryId,
       Title: item.Title,
       Author: item.Author,
