@@ -1,32 +1,9 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  Collapse,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Icon,
-  Input,
-  Spacer,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
-import { ICategory } from "../../utils/interfaces/category";
-import { createCategory } from "../../utils/api/category";
-import { AiFillEdit } from "react-icons/ai";
+import { Box, Button, Collapse, useDisclosure } from "@chakra-ui/react";
 import CategoryForm from "./CategoryForm";
 
-interface ICreateForm {
-  category?: ICategory;
-  isEditing?: boolean;
-  openBox?: boolean;
-}
-
-const CreateForm = (props: ICreateForm) => {
+const CreateForm = () => {
   const { isOpen, onToggle } = useDisclosure();
-  const isEditing = props.category != undefined;
 
   return (
     <>
