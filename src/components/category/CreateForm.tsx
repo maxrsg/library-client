@@ -20,7 +20,7 @@ const CreateForm = () => {
           shadow="md"
           border="2px solid teal"
         >
-          <CategoryForm />
+          <CategoryForm toggleParent={onToggle} />
           <Button mt={4} onClick={onToggle}>
             Cancel
           </Button>

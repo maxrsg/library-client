@@ -27,6 +27,7 @@ import { MdDelete } from "react-icons/md";
 import CreateForm from "./CreateForm";
 import { AiFillEdit } from "react-icons/ai";
 import CategoryForm from "./CategoryForm";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 
 const ShowCategory = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -34,13 +35,12 @@ const ShowCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [categories, setCategories] = useState<ICategory[]>();
 
-  useEffect(() => {
-    const getCategories = async () => {
-      const data = await getAllCategories();
-      setCategories(data);
-      console.log(data);
-    };
+  const getCategories = async () => {
+    const data = await getAllCategories();
+    setCategories(data);
+  };
 
+  useEffect(() => {
     if (!isEditing) {
       getCategories();
     }
@@ -49,7 +49,7 @@ const ShowCategory = () => {
   const callDeleteCategory = async (id: number | undefined) => {
     if (id) {
       const response = await deleteCategory(id);
-      console.log(response);
+      await getCategories();
     }
   };
 
@@ -73,7 +73,7 @@ const ShowCategory = () => {
   }
 
   return (
-    <>
+    <UpdateItemsContext.Provider value={{ updateItems: getCategories }}>
       <Button onClick={onOpen} fontSize="lg" colorScheme="teal" ml="1em">
         Show categories
       </Button>
@@ -150,7 +150,7 @@ const ShowCategory = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </UpdateItemsContext.Provider>
   );
 };
 

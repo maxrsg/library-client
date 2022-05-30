@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Button,
@@ -15,13 +15,16 @@ import {
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { ICategory } from "../../utils/interfaces/category";
 import { createCategory, editCategory } from "../../utils/api/category";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 
 interface ICreateForm {
   category?: ICategory;
   setIsEditing?: (set: boolean) => void;
+  toggleParent?: () => void;
 }
 
 const CategoryForm = (props: ICreateForm) => {
+  const { updateItems } = useContext(UpdateItemsContext);
   const isEditing = props.category != undefined;
 
   const validateRequired = (value: string) => {
@@ -47,6 +50,10 @@ const CategoryForm = (props: ICreateForm) => {
         } else {
           const response = await createCategory(values.CategoryName);
         }
+        if (props.toggleParent) {
+          props.toggleParent();
+        }
+        updateItems();
       }}
     >
       {(props) => (
@@ -87,6 +94,3 @@ const CategoryForm = (props: ICreateForm) => {
 };
 
 export default CategoryForm;
-function editCateory(Id: number | undefined, CategoryName: any) {
-  throw new Error("Function not implemented.");
-}
