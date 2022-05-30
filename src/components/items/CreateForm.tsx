@@ -30,7 +30,7 @@ interface ICreateFormProps {
 }
 
 const CreateForm = (props: ICreateFormProps) => {
-  const [type, setType] = useState("Book");
+  const [type, setType] = useState(props.item?.Type ? props.item.Type : "Book");
   const [categoryData, setCategoryData] = useState<ICategory[]>();
   const isEditing = props.item != undefined;
 
@@ -203,7 +203,7 @@ const CreateForm = (props: ICreateFormProps) => {
                   mb="1em"
                 >
                   <FormLabel htmlFor="Pages">Pages</FormLabel>
-                  <NumberInput min={0}>
+                  <NumberInput min={0} defaultValue={initialValues.Pages}>
                     <NumberInputField {...field} id="Pages" placeholder="0" />
                   </NumberInput>
                   <FormErrorMessage>{form.errors.Pages}</FormErrorMessage>
@@ -230,11 +230,14 @@ const CreateForm = (props: ICreateFormProps) => {
                   <FormLabel htmlFor="RunTimeMinutes">
                     Run time in minutes
                   </FormLabel>
-                  <NumberInput min={0}>
+                  <NumberInput
+                    min={0}
+                    defaultValue={initialValues.RunTimeMinutes}
+                  >
                     <NumberInputField
                       {...field}
                       id="RunTimeMinutes"
-                      placeholder="0"
+                      placeholder=""
                     />
                   </NumberInput>
                   <FormErrorMessage>
