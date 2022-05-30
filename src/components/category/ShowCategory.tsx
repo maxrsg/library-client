@@ -74,17 +74,9 @@ const ShowCategory = () => {
 
   return (
     <>
-      <Box
-        onClick={onOpen}
-        fontSize="xl"
-        maxH="2em"
-        display="inline-block"
-        p="0.5em"
-        textDecoration="underline"
-        _hover={{ color: "teal.400", cursor: "pointer" }}
-      >
-        Categories
-      </Box>
+      <Button onClick={onOpen} fontSize="lg" colorScheme="teal" ml="1em">
+        Show categories
+      </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

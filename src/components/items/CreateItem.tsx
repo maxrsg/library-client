@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -16,7 +16,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { AiFillEdit } from "react-icons/ai";
 import { ILibraryItem } from "../../utils/interfaces/items";
 import CreateForm from "./CreateForm";
-
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 interface ICreateItemProps {
   isEditing: boolean;
   item?: ILibraryItem;
@@ -24,6 +24,7 @@ interface ICreateItemProps {
 
 const CreateItem = (props: ICreateItemProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { updateItems } = useContext(UpdateItemsContext);
   return (
     <>
       {props.isEditing ? (
@@ -37,17 +38,9 @@ const CreateItem = (props: ICreateItemProps) => {
           _hover={{ color: "teal.500", cursor: "pointer" }}
         />
       ) : (
-        <Box
-          onClick={onOpen}
-          fontSize="xl"
-          maxH="2em"
-          display="inline-block"
-          p="0.5em"
-          textDecoration="underline"
-          _hover={{ color: "teal.400", cursor: "pointer" }}
-        >
+        <Button onClick={onOpen} fontSize="lg" colorScheme="teal">
           Create item
-        </Box>
+        </Button>
       )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -59,14 +52,21 @@ const CreateItem = (props: ICreateItemProps) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             {props.isEditing ? (
-              <CreateForm item={props.item} />
+              <CreateForm item={props.item} closeParent={onClose} />
             ) : (
-              <CreateForm />
+              <CreateForm closeParent={onClose} />
             )}
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button
+              onClick={() => {
+                onClose();
+                updateItems();
+              }}
+            >
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   FormControl,
   FormLabel,
@@ -10,6 +10,7 @@ import {
 import { Field, FieldInputProps, Form, Formik, FormikProps } from "formik";
 import { ILibraryItem } from "../../utils/interfaces/items";
 import { borrowItem } from "../../utils/api/items";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 
 interface IFormValues {
   Borrower?: string;
@@ -18,8 +19,10 @@ interface IFormValues {
 
 interface IBorrowForm {
   id: number;
+  closeParent: (close: boolean) => void;
 }
 const BorrowForm = (props: IBorrowForm) => {
+  const { updateItems } = useContext(UpdateItemsContext);
   let initialValues: IFormValues = {
     Borrower: undefined,
   };
@@ -41,6 +44,8 @@ const BorrowForm = (props: IBorrowForm) => {
           Id: props.id,
           Borrower: values.Borrower,
         });
+        props.closeParent(true);
+        updateItems();
       }}
     >
       {(props) => (

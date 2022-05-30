@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -14,6 +14,7 @@ import { ILibraryItem } from "../../utils/interfaces/items";
 import { createItem, editItem } from "../../utils/api/items";
 import { getAllCategories } from "../../utils/api/category";
 import { ICategory } from "../../utils/interfaces/category";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 
 interface IFormValues {
   CategoryId?: number;
@@ -27,12 +28,14 @@ interface IFormValues {
 
 interface ICreateFormProps {
   item?: ILibraryItem;
+  closeParent: (close: boolean) => void;
 }
 
 const CreateForm = (props: ICreateFormProps) => {
   const [type, setType] = useState(props.item?.Type ? props.item.Type : "Book");
   const [categoryData, setCategoryData] = useState<ICategory[]>();
   const isEditing = props.item != undefined;
+  const { updateItems } = useContext(UpdateItemsContext);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -89,10 +92,11 @@ const CreateForm = (props: ICreateFormProps) => {
         if (isEditing) {
           values.Id = props.item?.Id;
           const response = await editItem(values);
-          console.log(response);
         } else {
           const response = await createItem(values);
         }
+        props.closeParent(true);
+        updateItems();
       }}
     >
       {(props) => (

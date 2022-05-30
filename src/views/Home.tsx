@@ -18,11 +18,8 @@ const Home = () => {
           </Text>
         </Flex>
       </GridItem>
-      <GridItem colSpan={2} rowSpan={12}>
-        <SideMenu />
-      </GridItem>
-      <GridItem rowStart={2} rowEnd={13} colStart={3} colEnd={13}>
-        <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
+      <GridItem rowStart={2} rowEnd={13} colStart={1} colEnd={13}>
+        <Flex w="100%" justifyContent="center" alignItems="center">
           <ShowItems />
         </Flex>
       </GridItem>

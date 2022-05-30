@@ -16,6 +16,8 @@ import { ILibraryItem } from "../../utils/interfaces/items";
 import { MdDelete } from "react-icons/md";
 import CreateItem from "./CreateItem";
 import Borrow from "./Borrow";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
+import ShowCategory from "../category/ShowCategory";
 
 const ShowItems = () => {
   const [itemData, setItemData] = useState<ILibraryItem[]>();
@@ -66,76 +68,89 @@ const ShowItems = () => {
     );
   }
   return (
-    <Flex w="100%" h="100%" justifyContent="center" bgColor="transparent">
-      <TableContainer mt="2em">
-        <Table variant="striped" colorScheme="teal">
-          <Thead>
-            <Tr>
-              <Th>Title</Th>
-              <Th
-                textDecoration="underline"
-                cursor="pointer"
-                onClick={() => updateOrderBy(false)}
-              >
-                Category
-              </Th>
-              <Th
-                textDecoration="underline"
-                cursor="pointer"
-                onClick={() => updateOrderBy(true)}
-              >
-                Type
-              </Th>
-              <Th>Borrower</Th>
-              <Th>Borrow date</Th>
-              <Th>Check out/in</Th>
-              <Th>Edit</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {itemData.map((item: ILibraryItem, i) => {
-              return (
-                <Tr key={i}>
-                  <Td> {displayTitleWithAcronym(item.Title)}</Td>
-                  <Td>{item.CategoryName}</Td>
-                  <Td>{item.Type}</Td>
-                  <Td>{item.Borrower}</Td>
-                  <Td>
-                    {item.BorrowDate
-                      ? new Date(item.BorrowDate).toLocaleDateString()
-                      : null}
-                  </Td>
-                  <Td>
-                    {item.IsBorrowable ? (
-                      <Borrow
-                        id={item.Id}
-                        borrower={item.Borrower}
-                        title={item.Title}
-                        borrowDate={item.BorrowDate}
+    <UpdateItemsContext.Provider value={{ updateItems: getItems }}>
+      <Flex
+        w="100%"
+        h="100%"
+        justifyContent="center"
+        bgColor="transparent"
+        flexDirection="column"
+        p="4em"
+      >
+        <Flex>
+          <CreateItem isEditing={false} />
+          <ShowCategory />
+        </Flex>
+        <TableContainer mt="2em">
+          <Table variant="striped" colorScheme="teal">
+            <Thead>
+              <Tr>
+                <Th>Title</Th>
+                <Th
+                  textDecoration="underline"
+                  cursor="pointer"
+                  onClick={() => updateOrderBy(false)}
+                >
+                  Category
+                </Th>
+                <Th
+                  textDecoration="underline"
+                  cursor="pointer"
+                  onClick={() => updateOrderBy(true)}
+                >
+                  Type
+                </Th>
+                <Th>Borrower</Th>
+                <Th>Borrow date</Th>
+                <Th>Check out/in</Th>
+                <Th>Edit</Th>
+                <Th>Delete</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {itemData.map((item: ILibraryItem, i) => {
+                return (
+                  <Tr key={i}>
+                    <Td> {displayTitleWithAcronym(item.Title)}</Td>
+                    <Td>{item.CategoryName}</Td>
+                    <Td>{item.Type}</Td>
+                    <Td>{item.Borrower}</Td>
+                    <Td>
+                      {item.BorrowDate
+                        ? new Date(item.BorrowDate).toLocaleDateString()
+                        : null}
+                    </Td>
+                    <Td>
+                      {item.IsBorrowable ? (
+                        <Borrow
+                          id={item.Id}
+                          borrower={item.Borrower}
+                          title={item.Title}
+                          borrowDate={item.BorrowDate}
+                        />
+                      ) : null}
+                    </Td>
+                    <Td>
+                      <CreateItem isEditing={true} item={item} />
+                    </Td>
+                    <Td>
+                      <Icon
+                        as={MdDelete}
+                        w="1.5em"
+                        h="1.5em"
+                        color="red.600"
+                        cursor="pointer"
+                        onClick={() => callDeleteItem(item.Id)}
                       />
-                    ) : null}
-                  </Td>
-                  <Td>
-                    <CreateItem isEditing={true} item={item} />
-                  </Td>
-                  <Td>
-                    <Icon
-                      as={MdDelete}
-                      w="1.5em"
-                      h="1.5em"
-                      color="red.600"
-                      cursor="pointer"
-                      onClick={() => callDeleteItem(item.Id)}
-                    />
-                  </Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </Flex>
+                    </Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Flex>
+    </UpdateItemsContext.Provider>
   );
 };
 

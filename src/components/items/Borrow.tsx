@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Button,
   useDisclosure,
@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import BorrowForm from "./BorrowForm";
 import { borrowItem } from "../../utils/api/items";
+import { UpdateItemsContext } from "../../utils/contexts/updateItems";
 
 interface IBorrow {
   id?: number;
@@ -26,9 +27,12 @@ const Borrow = (props: IBorrow) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(props.borrower);
   const isBorrowed = props.borrower !== null;
+  const { updateItems } = useContext(UpdateItemsContext);
 
   const checkInItem = async () => {
     const response = await borrowItem({ Id: props.id, Borrower: null });
+    onClose();
+    updateItems();
   };
   return (
     <>
@@ -57,7 +61,7 @@ const Borrow = (props: IBorrow) => {
                 </Button>
               </Box>
             ) : (
-              <BorrowForm id={props.id || 1} />
+              <BorrowForm id={props.id || 1} closeParent={onClose} />
             )}
           </ModalBody>
 
