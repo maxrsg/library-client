@@ -36,7 +36,7 @@ const Borrow = (props: IBorrow) => {
   };
   return (
     <>
-      <Button colorScheme="teal" onClick={onOpen}>
+      <Button colorScheme="teal" onClick={onOpen} m="0">
         {isBorrowed ? "Check in " : "Check out "}
       </Button>
 
