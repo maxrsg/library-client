@@ -16,9 +16,17 @@ interface IBorrowData {
   Borrower: string | null;
 }
 
-export const getAllItems = async (): Promise<ILibraryItem[] | undefined> => {
+export const getAllItems = async (
+  orderByType = false
+): Promise<ILibraryItem[] | undefined> => {
   try {
-    const response: AxiosResponse<IRecievedItemData> = await axios.get(url);
+    let urlToCall = url;
+    if (orderByType) {
+      urlToCall += "?orderByType=true";
+    }
+    const response: AxiosResponse<IRecievedItemData> = await axios.get(
+      urlToCall
+    );
     return response.data.items;
   } catch (error) {
     console.log(error);

@@ -19,15 +19,20 @@ import Borrow from "./Borrow";
 
 const ShowItems = () => {
   const [itemData, setItemData] = useState<ILibraryItem[]>();
+  const storageOrderBy: boolean = JSON.parse(
+    localStorage.getItem("orderByType") || "false"
+  );
+  const [orderByType, setOrderByType] = useState(storageOrderBy);
 
   const getItems = async () => {
-    const data = await getAllItems();
+    const data = await getAllItems(orderByType);
     setItemData(data);
     console.log(data);
   };
+
   useEffect(() => {
     getItems();
-  }, []);
+  }, [orderByType]);
 
   const callDeleteItem = async (id: number | undefined) => {
     if (id) {
@@ -39,7 +44,12 @@ const ShowItems = () => {
 
   const displayTitleWithAcronym = (title: string) => {
     const acronym = title.match(/\b(\w)/g);
-    return title + " (" + acronym?.join("") + ")";
+    return title + " (" + acronym?.join("").toUpperCase() + ")";
+  };
+
+  const updateOrderBy = (type: boolean) => {
+    localStorage.setItem("orderByType", type.toString());
+    setOrderByType(type);
   };
 
   if (!itemData) {
@@ -62,8 +72,20 @@ const ShowItems = () => {
           <Thead>
             <Tr>
               <Th>Title</Th>
-              <Th>Category</Th>
-              <Th>Type</Th>
+              <Th
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => updateOrderBy(false)}
+              >
+                Category
+              </Th>
+              <Th
+                textDecoration="underline"
+                cursor="pointer"
+                onClick={() => updateOrderBy(true)}
+              >
+                Type
+              </Th>
               <Th>Borrower</Th>
               <Th>Borrow date</Th>
               <Th>Check out/in</Th>
