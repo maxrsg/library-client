@@ -22,7 +22,7 @@ const Home = () => {
         <SideMenu />
       </GridItem>
       <GridItem rowStart={2} rowEnd={13} colStart={3} colEnd={13}>
-        <Flex w="80%" h="80%" justifyContent="center" alignItems="center">
+        <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
           <ShowItems />
         </Flex>
       </GridItem>
